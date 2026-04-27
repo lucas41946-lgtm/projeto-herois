@@ -62,7 +62,7 @@ function patente() {
   const btnXp = {
     border: "1px solid #404040",
     borderRadius: "12px",
-    backgroundColor: "#aa3fbf",
+    backgroundColor: "#2699e6",
     color: "white",
     padding: "6px",
     width: "100%",

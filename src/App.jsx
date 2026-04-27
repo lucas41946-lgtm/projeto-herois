@@ -13,7 +13,7 @@ function App() {
   const [herois, setHerois] = useState([
     {
       id: 1,
-      nome: "Grog1",
+      nome: "Grog",
       classe: "Guerreiro",
       imagem: Guerreiro,
       status: "online",
@@ -21,7 +21,7 @@ function App() {
 
     {
       id: 2,
-      nome: "Arthemis1",
+      nome: "Arthemis",
       classe: "Arqueira",
       imagem: Arqueira,
       status: "ausente",
@@ -29,31 +29,7 @@ function App() {
 
     {
       id: 3,
-      nome: "Elora1",
-      classe: "Maga",
-      imagem: Maga,
-      status: "offline",
-    },
-
-    {
-      id: 4,
-      nome: "Grog2",
-      classe: "Guerreiro",
-      imagem: Guerreiro,
-      status: "online",
-    },
-
-    {
-      id: 5,
-      nome: "Arthemis2",
-      classe: "Arqueira",
-      imagem: Arqueira,
-      status: "ausente",
-    },
-
-    {
-      id: 6,
-      nome: "Elora2",
+      nome: "Elora",
       classe: "Maga",
       imagem: Maga,
       status: "offline",
@@ -95,7 +71,6 @@ function App() {
     flexWrap: "wrap",
     justifyContent: "center",
     fontFamily: "sans-serif",
-    backgroundColor: "#9c9c9c",
   };
 
   const filtrosStyle = {
@@ -109,7 +84,7 @@ function App() {
 
   const btnFilter = {
     color: "white",
-    backgroundColor: "#aa3fbf",
+    backgroundColor: "#2699e6",
     borderRadius: "15px",
     padding: "8px 15px",
     cursor: "pointer",

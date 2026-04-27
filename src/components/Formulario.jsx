@@ -26,7 +26,6 @@ function Formulario({ onCadastrar }) {
   const title = {
     fontSize: "1.5rem",
     marginBottom: "10px",
-    textShadow: "2px 2px 4px #ff4bf067"
   }
 
 
@@ -51,15 +50,9 @@ function Formulario({ onCadastrar }) {
           style={{ margin: "5px", padding: "8px", border: "1px solid black", borderRadius: "5px", boxShadow: "0 8px 6px -6px rgba(0, 0, 0, 0.3)"}}
         />
 <br />
-        <button style={{border: "1px solid black", padding: "10px", margin: "10px", width: "200px", borderRadius: "5px", color: "white", backgroundColor: "#AA3FBF", boxShadow: "0 8px 6px -6px rgba(0, 0, 0, 0.3)"}} 
+        <button style={{border: "1px solid black", padding: "10px", margin: "10px", width: "200px", borderRadius: "5px", color: "white", backgroundColor: "#00c000", boxShadow: "0 8px 6px -6px rgba(0, 0, 0, 0.3)"}} 
         type="submit">Cadastrar</button>
       </form>
-
-      <div style={{ marginTop: "10px" }}>
-        <p><strong>Nome:</strong> {nome}</p> {/* esse nome puxa o onchange que criei */}
-        <p><strong>Classe:</strong> {classe}</p>
-      </div>
-      <input type="text" />
     </div>
   );
 }

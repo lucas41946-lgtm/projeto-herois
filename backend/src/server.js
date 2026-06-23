@@ -4,6 +4,7 @@ import pool from "./config/db.js";
 import { autenticar } from "./middlewares/authMiddleware.js";
 import authRoutes from "./routes/authRoutes.js";
 import heroiRoutes from "./routes/heroiRoutes.js";
+import guildaRoutes from "./routes/guildaRoutes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get("/", (req, res) => {
 // rotas da aplicação
 app.use("/auth", authRoutes);
 app.use("/herois", heroiRoutes);
+app.use("/guildas", guildaRoutes);
 
 // rotas de teste (remover antes do deploy)
 app.get("/db-teste", async (req, res) => {

@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import pool from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import { autenticar } from "./middlewares/authMiddleware.js";
 
 const app = express();
 
@@ -22,6 +23,10 @@ app.get("/db-teste", async (req, res) => {
 });
 
 app.use("/auth", authRoutes);
+
+app.get("/protegido", autenticar, (req, res) => {
+  res.json({ mensagem: "Você acessou uma rota protegida!", usuario: req.usuario });
+});
 
 const PORT = 3000;
 app.listen(PORT, () => {

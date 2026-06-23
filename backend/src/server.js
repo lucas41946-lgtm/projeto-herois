@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import heroiRoutes from "./routes/heroiRoutes.js";
 import guildaRoutes from "./routes/guildaRoutes.js";
 import missaoRoutes from "./routes/missaoRoutes.js";
+import perfilRoutes from "./routes/perfilRoutes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/auth", authRoutes);
 app.use("/herois", heroiRoutes);
 app.use("/guildas", guildaRoutes);
 app.use("/missoes", missaoRoutes);
+app.use("/perfil", perfilRoutes);
 
 // rotas de teste (remover antes do deploy)
 app.get("/db-teste", async (req, res) => {

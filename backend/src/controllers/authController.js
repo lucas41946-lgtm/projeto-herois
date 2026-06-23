@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import pool from "../config/db.js";
-import { cadastroSchema } from "../schemas/usuarioSchema.js";
+import jwt from "jsonwebtoken";
+import { cadastroSchema, loginSchema } from "../schemas/usuarioSchema.js";
 
 export async function cadastrar(req, res) {
   try {
@@ -33,6 +34,51 @@ export async function cadastrar(req, res) {
     });
   } catch (erro) {
     // Erro de validação do Zod
+    if (erro.name === "ZodError") {
+      return res.status(400).json({ erro: erro.errors[0].message });
+    }
+    res.status(500).json({ erro: erro.message });
+  }
+}
+
+  export async function login(req, res) {
+  try {
+    // 1. Valida os dados
+    const dados = loginSchema.parse(req.body);
+
+    // 2. Busca o usuário pelo e-mail
+    const [usuarios] = await pool.query(
+      "SELECT * FROM usuarios WHERE email = ?",
+      [dados.email]
+    );
+    if (usuarios.length === 0) {
+      return res.status(401).json({ erro: "E-mail ou senha inválidos" });
+    }
+    const usuario = usuarios[0];
+
+    // 3. Compara a senha digitada com o hash salvo
+    const senhaConfere = await bcrypt.compare(dados.senha, usuario.senha);
+    if (!senhaConfere) {
+      return res.status(401).json({ erro: "E-mail ou senha inválidos" });
+    }
+
+    // 4. Gera o token JWT
+    const token = jwt.sign(
+      { id: usuario.id, nome: usuario.nome_completo },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // 5. Responde com o token e os dados básicos
+    res.json({
+      token,
+      usuario: {
+        id: usuario.id,
+        nome_completo: usuario.nome_completo,
+        email: usuario.email,
+      },
+    });
+  } catch (erro) {
     if (erro.name === "ZodError") {
       return res.status(400).json({ erro: erro.errors[0].message });
     }

@@ -8,10 +8,8 @@ Cada recrutador possui acesso restrito ao sistema, podendo cadastrar, gerenciar 
 
 ## 🔗 Links de Produção
 
-> Preencher após o deploy.
-
-- **Frontend (Vercel):** _em breve_
-- **Backend (Render):** _em breve_
+- **Frontend (Vercel):** https://projeto-herois-lake.vercel.app
+- **Backend (Render):** https://portal-herois-api.onrender.com
 - **Repositório:** https://github.com/lucas41946-lgtm/projeto-herois
 
 ---

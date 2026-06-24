@@ -25,22 +25,8 @@ app.use("/guildas", guildaRoutes);
 app.use("/missoes", missaoRoutes);
 app.use("/perfil", perfilRoutes);
 
-// rotas de teste (remover antes do deploy)
-app.get("/db-teste", async (req, res) => {
-  try {
-    const [linhas] = await pool.query("SELECT * FROM guildas");
-    res.json(linhas);
-  } catch (erro) {
-    res.status(500).json({ erro: erro.message });
-  }
-});
-
-app.get("/protegido", autenticar, (req, res) => {
-  res.json({ mensagem: "Você acessou uma rota protegida!", usuario: req.usuario });
-});
-
 // sobe o servidor
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });

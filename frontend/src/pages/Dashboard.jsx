@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 import CardHeroi from "../components/CardHeroi.jsx";
@@ -11,7 +12,6 @@ export default function Dashboard() {
   const [busca, setBusca] = useState("");
   const [filtroClasse, setFiltroClasse] = useState("Todos");
 
-  // QUERY: busca os heróis do recrutador logado
   const { data: herois, isLoading, isError } = useQuery({
     queryKey: ["herois"],
     queryFn: async () => {
@@ -20,7 +20,6 @@ export default function Dashboard() {
     },
   });
 
-  // MÉTRICAS — recalculadas só quando a lista muda
   const metricas = useMemo(() => {
     if (!herois || herois.length === 0) {
       return { total: 0, mediaPoder: 0, guildaMaisForte: "—" };
@@ -41,7 +40,6 @@ export default function Dashboard() {
     return { total, mediaPoder, guildaMaisForte };
   }, [herois]);
 
-  // FILTRO — busca por nome + filtro por classe (useMemo)
   const heroisFiltrados = useMemo(() => {
     if (!herois) return [];
     return herois.filter((h) => {
@@ -60,7 +58,6 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
-      {/* Cabeçalho */}
       <header className="border-b border-slate-800 px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold">
           Bem-vindo, Recrutador{" "}
@@ -90,7 +87,6 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        {/* Métricas */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
           <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
             <p className="text-slate-400 text-sm">Total de Heróis</p>
@@ -106,7 +102,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Busca */}
         <input
           type="text"
           placeholder="Buscar herói pelo nome..."
@@ -115,7 +110,6 @@ export default function Dashboard() {
           className="w-full bg-slate-900 border border-slate-800 px-4 py-3 rounded-lg mb-4 outline-none focus:ring-2 focus:ring-cyan-500"
         />
 
-        {/* Filtros por classe */}
         <div className="flex flex-wrap gap-2 mb-6">
           {classes.map((c) => (
             <button
@@ -132,7 +126,6 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* Estados */}
         {isLoading && <p className="text-slate-400">Carregando heróis...</p>}
         {isError && <p className="text-red-400">Erro ao carregar heróis.</p>}
         {herois && herois.length === 0 && (
@@ -144,13 +137,17 @@ export default function Dashboard() {
           <p className="text-slate-400">Nenhum herói encontrado com esses filtros.</p>
         )}
 
-        {/* Galeria de heróis */}
         {heroisFiltrados.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {heroisFiltrados.map((heroi) => (
-              <CardHeroi key={heroi.id} heroi={heroi} />
-            ))}
-          </div>
+          <motion.div
+            layout
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+          >
+            <AnimatePresence>
+              {heroisFiltrados.map((heroi) => (
+                <CardHeroi key={heroi.id} heroi={heroi} />
+              ))}
+            </AnimatePresence>
+          </motion.div>
         )}
       </main>
     </div>

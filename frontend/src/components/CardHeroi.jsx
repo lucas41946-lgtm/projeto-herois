@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import api from "../api/axios.js";
 
@@ -47,7 +48,14 @@ export default function CardHeroi({ heroi }) {
   }
 
   return (
-    <div className={`bg-slate-900 border-2 ${corPatente()} rounded-2xl p-5 transition hover:scale-[1.02]`}>
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ duration: 0.3 }}
+      className={`bg-slate-900 border-2 ${corPatente()} rounded-2xl p-5 hover:scale-[1.02]`}
+    >
       <div
         className="flex items-center gap-4 cursor-pointer"
         onClick={() => navigate(`/heroi/${heroi.id}`)}
@@ -127,6 +135,6 @@ export default function CardHeroi({ heroi }) {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

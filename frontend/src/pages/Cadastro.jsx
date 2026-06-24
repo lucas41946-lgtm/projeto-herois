@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios.js";
 
 export default function Cadastro() {
@@ -19,7 +20,8 @@ export default function Cadastro() {
       return resposta.data;
     },
     onSuccess: () => {
-      navigate("/login"); // após cadastrar, vai pro login
+      toast.success("Conta criada! Faça login.");
+      navigate("/login");
     },
   });
 

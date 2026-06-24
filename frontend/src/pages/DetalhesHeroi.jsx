@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios.js";
 
 export default function DetalhesHeroi() {
@@ -8,18 +9,15 @@ export default function DetalhesHeroi() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Estados do formulário de edição
   const [nome, setNome] = useState("");
   const [classe, setClasse] = useState("Guerreiro");
   const [nivelPoder, setNivelPoder] = useState("");
   const [urlAvatar, setUrlAvatar] = useState("");
   const [guildaId, setGuildaId] = useState("");
 
-  // Estados da nova missão
   const [descricaoMissao, setDescricaoMissao] = useState("");
   const [recompensaMissao, setRecompensaMissao] = useState("");
 
-  // Busca o herói pelo id
   const { data: heroi, isLoading } = useQuery({
     queryKey: ["heroi", id],
     queryFn: async () => {
@@ -28,7 +26,6 @@ export default function DetalhesHeroi() {
     },
   });
 
-  // Busca as guildas pro dropdown
   const { data: guildas } = useQuery({
     queryKey: ["guildas"],
     queryFn: async () => {
@@ -37,7 +34,6 @@ export default function DetalhesHeroi() {
     },
   });
 
-  // Busca as missões do herói
   const { data: missoes } = useQuery({
     queryKey: ["missoes", id],
     queryFn: async () => {
@@ -46,7 +42,6 @@ export default function DetalhesHeroi() {
     },
   });
 
-  // Preenche o formulário quando o herói carrega
   useEffect(() => {
     if (heroi) {
       setNome(heroi.nome);
@@ -57,7 +52,6 @@ export default function DetalhesHeroi() {
     }
   }, [heroi]);
 
-  // Mutation: atualizar herói
   const atualizar = useMutation({
     mutationFn: async () => {
       const resposta = await api.put(`/herois/${id}`, {
@@ -72,10 +66,13 @@ export default function DetalhesHeroi() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["heroi", id] });
       queryClient.invalidateQueries({ queryKey: ["herois"] });
+      toast.success("Herói atualizado!");
+    },
+    onError: (erro) => {
+      toast.error(erro?.response?.data?.erro || "Erro ao salvar");
     },
   });
 
-  // Mutation: criar missão
   const criarMissao = useMutation({
     mutationFn: async () => {
       const resposta = await api.post(`/missoes/heroi/${id}`, {
@@ -86,18 +83,19 @@ export default function DetalhesHeroi() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["missoes", id] });
+      toast.success("Missão enviada!");
       setDescricaoMissao("");
       setRecompensaMissao("");
     },
   });
 
-  // Mutation: deletar herói
   const deletar = useMutation({
     mutationFn: async () => {
       await api.delete(`/herois/${id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["herois"] });
+      toast.success("Herói dispensado!");
       navigate("/");
     },
   });
@@ -120,7 +118,6 @@ export default function DetalhesHeroi() {
       </header>
 
       <main className="p-6 max-w-3xl mx-auto flex flex-col gap-6">
-        {/* Edição do herói */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
           <div className="flex items-center gap-4 mb-6">
             <img
@@ -196,15 +193,6 @@ export default function DetalhesHeroi() {
               </select>
             </div>
 
-            {atualizar.isError && (
-              <p className="text-red-400 text-sm">
-                {atualizar.error?.response?.data?.erro || "Erro ao salvar"}
-              </p>
-            )}
-            {atualizar.isSuccess && (
-              <p className="text-green-400 text-sm">Herói atualizado com sucesso!</p>
-            )}
-
             <div className="flex gap-3 mt-2">
               <button
                 onClick={() => atualizar.mutate()}
@@ -227,7 +215,6 @@ export default function DetalhesHeroi() {
           </div>
         </div>
 
-        {/* Missões */}
         <div className="bg-slate-900 border border-slate-800 rounded-2xl p-8">
           <h3 className="text-xl font-bold mb-4">Histórico de Missões</h3>
 

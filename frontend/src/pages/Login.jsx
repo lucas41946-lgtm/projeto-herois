@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios.js";
 import { useAuth } from "../context/AuthContext.jsx";
 
@@ -17,6 +18,7 @@ export default function Login() {
     },
     onSuccess: (data) => {
       login(data.token, data.usuario);
+      toast.success("Bem-vindo de volta!");
       navigate("/");
     },
   });

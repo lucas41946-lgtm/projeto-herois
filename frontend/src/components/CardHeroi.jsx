@@ -1,22 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios.js";
 
 export default function CardHeroi({ heroi }) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Dispensar herói
   const dispensar = useMutation({
     mutationFn: async () => {
       await api.delete(`/herois/${heroi.id}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["herois"] });
+      toast.success("Herói dispensado!");
     },
   });
 
-  // Ajustar poder (+10 / -10) — salva no banco
   const ajustarPoder = useMutation({
     mutationFn: async (delta) => {
       const novoNivel = Math.min(100, Math.max(0, heroi.nivel_poder + delta));
@@ -30,10 +30,10 @@ export default function CardHeroi({ heroi }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["herois"] });
+      toast.success("Poder atualizado!");
     },
   });
 
-  // Cor da borda conforme a faixa de poder (a "patente")
   function corPatente() {
     if (heroi.nivel_poder >= 80) return "border-amber-400";
     if (heroi.nivel_poder >= 50) return "border-cyan-400";
@@ -42,14 +42,12 @@ export default function CardHeroi({ heroi }) {
 
   const blocosAcesos = Math.round(heroi.nivel_poder / 10);
 
-  // Imagem reserva caso a URL falhe
   function usarReserva(e) {
     e.target.src = `https://api.dicebear.com/7.x/adventurer/svg?seed=${heroi.nome}`;
   }
 
   return (
     <div className={`bg-slate-900 border-2 ${corPatente()} rounded-2xl p-5 transition hover:scale-[1.02]`}>
-      {/* Avatar + nome + classe */}
       <div
         className="flex items-center gap-4 cursor-pointer"
         onClick={() => navigate(`/heroi/${heroi.id}`)}
@@ -66,7 +64,6 @@ export default function CardHeroi({ heroi }) {
         </div>
       </div>
 
-      {/* Barra de Nível de Poder */}
       <div className="mt-4">
         <div className="flex justify-between text-xs text-slate-400 mb-1">
           <span>Nível de Poder</span>
@@ -84,7 +81,6 @@ export default function CardHeroi({ heroi }) {
         </div>
       </div>
 
-      {/* Botões +10 / -10 poder */}
       <div className="mt-3 flex gap-2">
         <button
           onClick={() => ajustarPoder.mutate(10)}
@@ -102,15 +98,13 @@ export default function CardHeroi({ heroi }) {
         </button>
       </div>
 
-      {/* Guilda */}
       <p className="mt-3 text-sm text-slate-400">
         Guilda: <span className="text-pink-400">{heroi.guilda_nome}</span>
       </p>
 
-      {/* Botões principais */}
       <div className="mt-4 flex flex-col gap-2">
         <button
-          onClick={() => alert(`${heroi.nome} foi convocado para o seu time!`)}
+          onClick={() => toast.success(`${heroi.nome} foi convocado para o seu time!`)}
           className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-2 rounded-lg transition"
         >
           Recrutar

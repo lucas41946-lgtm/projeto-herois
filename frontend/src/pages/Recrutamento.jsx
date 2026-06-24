@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
+import toast from "react-hot-toast";
 import api from "../api/axios.js";
 
 export default function Recrutamento() {
@@ -13,7 +14,6 @@ export default function Recrutamento() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Busca as guildas pro dropdown
   const { data: guildas } = useQuery({
     queryKey: ["guildas"],
     queryFn: async () => {
@@ -22,7 +22,6 @@ export default function Recrutamento() {
     },
   });
 
-  // Mutation de criar herói
   const mutation = useMutation({
     mutationFn: async () => {
       const resposta = await api.post("/herois", {
@@ -36,7 +35,11 @@ export default function Recrutamento() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["herois"] });
+      toast.success("Herói recrutado com sucesso!");
       navigate("/");
+    },
+    onError: (erro) => {
+      toast.error(erro?.response?.data?.erro || "Erro ao recrutar herói");
     },
   });
 

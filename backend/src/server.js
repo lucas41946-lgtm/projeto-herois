@@ -10,7 +10,16 @@ import perfilRoutes from "./routes/perfilRoutes.js";
 
 const app = express();
 
-app.use(cors());
+const origensPermitidas = [
+  "http://localhost:5173",
+  process.env.FRONTEND_URL,
+];
+
+app.use(
+  cors({
+    origin: origensPermitidas,
+  })
+);
 app.use(express.json());
 
 // rota raiz
